@@ -1,0 +1,124 @@
+@import "tailwindcss";
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#14283f;background:#f5f7fb}*{box-sizing:border-box}button{cursor:pointer}button:disabled{cursor:not-allowed}.panel{background:#fff;border:1px solid #e7ecf2;border-radius:16px;box-shadow:0 3px 16px rgba(19,41,71,.035)}.muted{color:#8190a5}.pill{border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700}.input{border:1px solid #dce5ee;border-radius:9px;padding:10px 12px;outline:none;background:white;width:100%}.input:focus{border-color:#2563eb;box-shadow:0 0 0 3px #dbeafe}.btn-primary{background:#2463e8;color:white;border-radius:9px;padding:10px 16px;font-weight:650;font-size:13px}.btn-primary:hover{background:#174fcb}.btn-secondary{background:#fff;border:1px solid #dce5ee;border-radius:9px;padding:10px 14px;font-weight:650;font-size:13px}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;text-align:left}th{background:#f8fafc;color:#7d8da1;font-size:11px;text-transform:uppercase;letter-spacing:.055em;font-weight:750;padding:14px 16px;white-space:nowrap}td{border-top:1px solid #edf1f5;padding:15px 16px;font-size:13px;white-space:nowrap}tbody tr:hover{background:#fafcff}.field-label{font-size:12px;font-weight:650;color:#53647a;margin-bottom:6px;display:block}
+
+/* Keep search text clear of the inset icon; override the base input padding. */
+.input.input-search{padding-left:40px}
+
+/* Shared V1 dropdown styling; native selection and keyboard support are retained. */
+select.input.select-control{
+  appearance:none;
+  -webkit-appearance:none;
+  min-height:42px;
+  padding:10px 40px 10px 12px;
+  font-family:inherit;
+  font-size:13px;
+  font-weight:500;
+  line-height:20px;
+  color:#14283f;
+  text-overflow:ellipsis;
+  cursor:pointer;
+  background-color:#fff;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238190a5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-position:right 12px center;
+  background-repeat:no-repeat;
+  background-size:16px;
+  transition:border-color .15s ease,box-shadow .15s ease;
+}
+select.input.select-control:hover:not(:disabled):not(:focus){border-color:#a9bbcf}
+select.input.select-control:focus{border-color:#2563eb;box-shadow:0 0 0 3px #dbeafe}
+select.input.select-control:disabled{background-color:#f8fafc;color:#8190a5;cursor:not-allowed;opacity:.7}
+
+.input.input-password{padding-right:44px}
+
+/* Login-only glass panel complements the construction photograph. */
+.panel.login-panel{
+  background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(20,46,80,.3));
+  border:1px solid rgba(255,255,255,.35);
+  box-shadow:0 24px 70px rgba(7,18,31,.3),inset 0 1px 0 rgba(255,255,255,.18);
+  backdrop-filter:blur(16px) saturate(125%);
+  -webkit-backdrop-filter:blur(16px) saturate(125%);
+  color:#f8fafc;
+}
+.login-panel .muted{color:#c4d0df}
+.login-panel .field-label{color:#e2e8f0}
+.login-panel .input{
+  background:rgba(255,255,255,.09);
+  border-color:rgba(255,255,255,.25);
+  color:#fff;
+  caret-color:#fff;
+}
+.login-panel .input::placeholder{color:#b6c5d7}
+.login-panel .input:focus{
+  background:rgba(255,255,255,.13);
+  border-color:#93c5fd;
+  box-shadow:0 0 0 3px rgba(147,197,253,.18);
+}
+.login-panel .input + button{color:#cbd5e1}
+.login-panel .input + button:hover{color:#fff}
+.login-panel [role="alert"]{
+  color:#fecaca;
+  background:rgba(127,29,29,.25);
+  border:1px solid rgba(252,165,165,.3);
+  border-radius:9px;
+  padding:10px 12px;
+}
+.login-panel .input:-webkit-autofill{
+  -webkit-text-fill-color:#fff;
+  caret-color:#fff;
+  -webkit-box-shadow:0 0 0 1000px #29415c inset;
+}
+
+/* Responsive refinements preserve V1's desktop styling. */
+.panel{min-width:0}
+.app-sidebar{height:100dvh;padding-bottom:env(safe-area-inset-bottom)}
+.app-sidebar nav{overscroll-behavior:contain}
+.section-head>div:first-child{min-width:0}
+.modal-close{display:flex;align-items:center;justify-content:center}
+.modal-dialog{overscroll-behavior:contain}
+.login-screen{min-height:100dvh}
+@media(max-width:639px){
+  .app-header{padding-left:12px;padding-right:12px;gap:8px}
+  .app-sidebar{max-width:calc(100vw - 16px)}
+  button:not([role="tab"]),a[href]{touch-action:manipulation}
+  button:not([role="tab"]){min-height:44px}
+  button[aria-label]{min-width:44px}
+  .input,select.input.select-control{font-size:16px;min-height:46px;line-height:24px}
+  .section-head h2{font-size:22px;line-height:1.25}
+  .section-action{width:100%}
+  .section-action>button{width:100%;justify-content:center}
+  [role="tablist"]{overflow-x:auto;overscroll-behavior-x:contain}
+  [role="tab"]{min-height:44px;flex-shrink:0}
+  .modal-backdrop{padding:12px;align-items:center}
+  .modal-dialog{max-height:calc(100dvh - 24px);border-radius:14px}
+  .modal-heading{position:sticky;top:0;background:white;z-index:1;padding:12px 16px;gap:8px}
+  .modal-heading h3{font-size:17px}
+  .modal-content{padding:16px}
+  .modal-content .flex.justify-end{flex-wrap:wrap}
+  .modal-content .flex.justify-end>button{flex:1;justify-content:center}
+  .payroll-period{display:block;padding:16px}
+  .payroll-week-controls{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:8px}
+  .payroll-week-controls>button{padding:10px;display:flex;align-items:center;justify-content:center}
+  .payroll-period>div:last-child{margin-top:16px;justify-content:space-between;flex-wrap:wrap}
+  .responsive-table{overflow:visible}
+  .responsive-table table{display:block;min-width:0}
+  .responsive-table thead{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .responsive-table tbody{display:grid;gap:12px;padding:12px}
+  .responsive-table tbody:empty{padding:0}
+  .responsive-table tr{display:block;border:1px solid #e7ecf2;border-radius:12px;background:#fff;overflow:hidden}
+  .responsive-table td{display:grid;grid-template-columns:minmax(84px,.85fr) minmax(0,1.15fr);align-items:center;gap:12px;white-space:normal;overflow-wrap:anywhere;padding:9px 12px;font-size:13px}
+  .responsive-table td:first-child{border-top:0}
+  .responsive-table td::before{content:attr(data-label);font-size:11px;font-weight:650;color:#7d8da1}
+  .responsive-table td[colspan]{display:block}
+  .responsive-table td[colspan]::before{content:none}
+  .responsive-table td>*{min-width:0}
+  .responsive-table .pill{width:fit-content;max-width:100%}
+  .responsive-table td>button{justify-self:start;text-align:left}
+}
+
+@media(max-width:1023px) and (pointer:coarse){
+  button,a[href]{min-height:44px;touch-action:manipulation}
+  button[aria-label]{min-width:44px}
+  .input,select.input.select-control{font-size:16px;min-height:46px;line-height:24px}
+  .modal-dialog{max-height:calc(100dvh - 24px)}
+  .modal-heading{position:sticky;top:0;background:#fff;z-index:1}
+}

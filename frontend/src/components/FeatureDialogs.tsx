@@ -1,0 +1,26 @@
+import { Button, Input, NumericInput, Select, DatePicker, FormField, Modal } from './ui';
+import { INR } from '../utils/format';
+import { TODAY } from '../utils/dates';
+import { Save } from 'lucide-react';
+import type { Application } from '../hooks/useApplication';
+export function FeatureDialogs({ model }: {
+    model: Application;
+}) {
+    const { modal, setModal, selectedLabour, name, open, salaryHistory, active, sites, users, submit, form, setF, notice, saving, editingAttendance } = model;
+    const field = (label: string, key: string, placeholder: string, type = 'text') => <FormField label={label}>{type === 'date' ? <DatePicker disabled={saving||Boolean(editingAttendance&&key==='date')} placeholder={placeholder} value={form[key] || ''} onChange={e => setF(key, e.target.value)}/> : type === 'phone' ? <NumericInput disabled={saving} allowDecimal={false} inputMode="tel" autoComplete="tel" placeholder={placeholder} value={form[key] || ''} onValueChange={value => setF(key, value)}/> : type === 'numeric' ? <NumericInput disabled={saving} placeholder={placeholder} value={form[key] || ''} onValueChange={value => setF(key, value)}/> : <Input disabled={saving} type={type} placeholder={placeholder} value={form[key] || ''} onChange={e => setF(key, e.target.value)}/>}</FormField>;
+    const dropdown = (label: string, key: string, options: {
+        value: string;
+        label: string;
+    }[]) => <FormField label={label}><Select disabled={saving||Boolean(editingAttendance&&(key==='labourId'||key==='siteId'))} className="input" value={form[key] || options[0]?.value || ''} onChange={e => setF(key, e.target.value)}>{options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</Select></FormField>;
+    return modal && <Modal title={modal === 'site-supervisor' ? 'Assign Site Supervisor' : modal === 'site' ? 'Add Construction Site' : modal === 'labour' ? 'Add Labourer' : modal === 'salary' ? 'Revise Daily Wage' : modal === 'profile' ? 'Labour Profile & Salary History' : modal === 'attendance' ? 'Mark Attendance' : modal === 'advance' ? 'Record Labour Advance' : 'Record Salary Payment'} onClose={() => {if(!saving)setModal('');}}>
+    {modal === 'site' && <>{field('Site Name *', 'name', 'e.g. T Nagar Residence')}{field('Location', 'location', 'Chennai')}{dropdown('Supervisor', 'supervisorId', [{value: '', label: 'Unassigned'}, ...users.filter(user => user.role === 'Supervisor').map(user => ({value: user.id, label: user.name}))])}{field('Budget (₹)', 'budget', '2500000', 'numeric')}</>}
+    {modal === 'site-supervisor' && <><p className="font-semibold text-sm mb-4">{sites.find(site => site.id === form.siteId)?.name}</p>{dropdown('Supervisor', 'supervisorId', [{value: '', label: 'Unassigned'}, ...users.filter(user => user.role === 'Supervisor').map(user => ({value: user.id, label: user.name}))])}<p className="text-xs muted mb-4">Create Supervisor users in Settings → User Management.</p></>}
+    {modal === 'labour' && <>{field('Full Name *', 'name', 'Worker name')}{dropdown('Category', 'category', ['Mason', 'Helper', 'Carpenter', 'Electrician', 'Plumber', 'Painter'].map(x => ({ value: x, label: x })))}{field('Phone', 'phone', 'Phone number', 'phone')}{field('Daily Wage (₹)', 'rate', '1200', 'numeric')}{field('Effective From', 'from', '', 'date')}</>}
+    {modal === 'profile' && <><div className="flex justify-between items-center mb-5"><div><div className="font-bold">{name(selectedLabour)}</div><div className="text-xs muted">{selectedLabour}</div></div><Button className="btn-primary" onClick={() => open('salary', { from: TODAY })}>Revise Wage</Button></div><h4 className="text-sm font-bold mb-3">Salary history</h4><div className="space-y-3">{(salaryHistory[selectedLabour] || []).map((s, i) => <div key={i} className="border border-slate-100 rounded-lg p-4 flex justify-between"><div className="text-xs muted">Effective from {s.from}</div><div className="font-bold">{INR(s.rate)} / day</div></div>)}</div></>}
+    {modal === 'salary' && <>{field('New Daily Wage (₹)', 'rate', '1200', 'numeric')}{field('Effective From', 'from', '', 'date')}<p className="text-xs muted mb-3">The new daily wage applies from the selected effective date.</p></>}
+    {modal === 'attendance' && <>{dropdown('Labourer', 'labourId', active.map(l => ({ value: l.id, label: l.name })))}{dropdown('Site', 'siteId', sites.map(s => ({ value: s.id, label: s.name })))}{field('Work Date', 'date', '', 'date')}{dropdown('Attendance', 'units', [{ value: '1', label: 'Full Day (1)' }, { value: '0.5', label: 'Half Day (0.5)' }, { value: '0', label: 'Absent (0)' }])}{field('Overtime Hours', 'ot', '0', 'numeric')}</>}
+    {modal === 'advance' && <>{dropdown('Labourer', 'labourId', active.map(l => ({ value: l.id, label: l.name })))}{field('Advance Amount (₹)', 'amount', '2000', 'numeric')}{field('Date', 'date', '', 'date')}</>}
+
+    {notice && <p role="alert" className="text-sm text-amber-700 mb-3">{notice}</p>}{modal !== 'profile' && <div className="flex justify-end gap-2 pt-3 border-t border-slate-100"><Button disabled={saving} className="btn-secondary" onClick={() => setModal('')}>Cancel</Button><Button className="btn-primary flex items-center gap-2" disabled={saving} onClick={()=>void submit()}><Save size={15}/> {saving?'Saving…':'Save'}</Button></div>}
+    </Modal>;
+}

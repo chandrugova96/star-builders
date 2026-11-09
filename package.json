@@ -1,0 +1,25 @@
+{
+  "name": "star-builders",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "setup": "npm --prefix frontend install && npm --prefix backend install",
+    "dev": "npm --prefix frontend run dev --",
+    "build": "npm --prefix frontend run build",
+    "preview": "npm --prefix frontend run preview --",
+    "test": "npm --prefix frontend test",
+    "test:responsive": "npm --prefix frontend run test:responsive --",
+    "frontend:install": "npm --prefix frontend install",
+    "backend:install": "npm --prefix backend install",
+    "backend:dev": "npm --prefix backend run dev",
+    "backend:build": "npm --prefix backend run build",
+    "backend:test": "npm --prefix backend test",
+    "backend:start": "npm --prefix backend start",
+    "build:all": "npm run build && npm run backend:build",
+    "test:all": "npm test && npm run backend:test",
+    "backend:test:integration": "node backend/tests/run-replica-tests.mjs",
+    "deploy:build": "npm --prefix frontend ci --include=dev && npm --prefix backend ci --include=dev && npm run build:all",
+    "deploy:start": "npm --prefix backend start"
+  }
+}

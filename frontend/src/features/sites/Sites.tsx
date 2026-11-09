@@ -1,0 +1,12 @@
+import { Button, Card, Badge as Status } from '../../components/ui';
+import { SectionHead } from '../../components/SectionHead';
+import { action } from '../../components/AddAction';
+import { INR } from '../../utils/format';
+import { Building2, MapPin } from 'lucide-react';
+import type { Application } from '../../hooks/useApplication';
+export function Sites({ model }: {
+    model: Application;
+}) {
+    const { sites, isAdmin, open, setSiteFilter, navigateTo } = model;
+    return <><SectionHead title="Site Management" subtitle="Manage construction projects, supervisors and labour allocations." action={isAdmin?action('Add New Site', () => open('site')):undefined}/><div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">{sites.map((s, i) => <Card key={s.id} className="overflow-hidden"><div className={'h-28 flex items-center justify-center ' + (['bg-gradient-to-br from-blue-100 to-slate-200', 'bg-gradient-to-br from-sky-100 to-blue-200', 'bg-gradient-to-br from-slate-200 to-indigo-100'][i % 3])}><Building2 size={47} className="text-blue-500/50"/></div><div className="p-5"><div className="flex justify-between gap-2"><div className="font-bold">{s.name}</div><Status value={s.status}/></div><p className="flex items-center gap-1 text-xs muted mt-2"><MapPin size={13}/>{s.location}</p><div className="border-t border-slate-100 mt-4 pt-4 grid grid-cols-2 gap-3 text-xs"><div><div className="flex items-center justify-between gap-2"><span className="muted">Supervisor</span><Button className="text-blue-600 text-xs font-semibold" hidden={!isAdmin} aria-label={'Assign supervisor for ' + s.name} onClick={() => open('site-supervisor', {siteId: s.id, supervisorId: s.supervisorId || ''})}>Assign</Button></div><div className="font-semibold mt-1">{s.supervisor}</div></div><div><div className="muted">Workers</div><div className="font-semibold mt-1">{s.workers}</div></div>{isAdmin&&<div><div className="muted">Project Budget</div><div className="font-semibold mt-1">{INR(s.budget)}</div></div>}<div><div className="muted">Site Code</div><div className="font-semibold mt-1">{s.siteCode||s.id}</div></div></div><Button className="btn-secondary w-full mt-5" onClick={() => { setSiteFilter(s.id); navigateTo('Attendance'); }}>Manage attendance</Button></div></Card>)}</div>{!model.dataLoading&&!sites.length&&<Card className="p-6 text-sm muted">{isAdmin?'No sites yet. Add your first site to get started.':'No sites assigned. Contact your administrator.'}</Card>}</>;
+}

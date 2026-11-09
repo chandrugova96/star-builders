@@ -1,0 +1,25 @@
+# Deploy the existing frontend and API together. MongoDB stays in Atlas.
+services:
+  - type: web
+    name: star-builders
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm run deploy:build
+    startCommand: npm run deploy:start
+    healthCheckPath: /api/health/ready
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: SERVE_FRONTEND
+        value: "true"
+      - key: TRUST_PROXY
+        value: "1"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        sync: false
